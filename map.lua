@@ -38,13 +38,17 @@ end
 ---Draws an area of the map to the display.
 ---@param rect table the dimensions of the area we want to draw.
 function GameMap:draw(rect)
-    -- TODO: Add drawing function to draw tiles
     for c = rect.x, rect.x + rect.w do
         for r = rect.y, rect.y + rect.h do
-            
-            spr(self:get_field0(c, r), c*8, r*8)
-            -- io.write(self:get_field0(rect.x + c, rect.y + r))
+            spr(self:get_field0(c, r), Tile2Pixel(c), Tile2Pixel(r))
         end
-        -- io.write'\n'
     end
+end
+
+function Pixel2Tile(pixel)
+    return flr(pixel / 8)
+end
+
+function Tile2Pixel(tile)
+    return tile * 8
 end
