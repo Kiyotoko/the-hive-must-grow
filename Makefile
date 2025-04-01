@@ -1,6 +1,10 @@
 path = ~/.lexaloffle/pico-8/carts/feed-the-queen/
 
-all: install
+all: test install
+
+test:
+	# test lua files for errors
+	@lua tests.lua
 
 install:
 	# copy new game files
