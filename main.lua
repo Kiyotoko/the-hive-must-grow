@@ -1,4 +1,4 @@
----@diagnostic disable: undefined-global, lowercase-global
+---@diagnostic disable: lowercase-global
 -- offset of the camera
 Cam = {
     x = 0,
@@ -9,13 +9,13 @@ Cam = {
 function _init()
     -- activate dev mode
     poke(0x5f2d, 1)
-    palt(16, true)
+    palt(15, true)
     palt(0, false)
 end
 
 function _update()
-    if btn(0) then Cam.x = Cam.x + 1 * Cam.speed end
-    if btn(1) then Cam.x = Cam.x - 1 * Cam.speed end
+    if btn(0) then Cam.x = Cam.x - 1 * Cam.speed end
+    if btn(1) then Cam.x = Cam.x + 1 * Cam.speed end
     -- deactivate y axis control
     -- if btn(2) then cam.y = cam.y + 1 end
     -- if btn(3) then cam.y = cam.y - 1 end

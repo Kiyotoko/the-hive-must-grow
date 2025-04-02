@@ -8,6 +8,8 @@ MapGen = {
     40
 }
 
+---Returns the next random tile
+---@return integer tile the number of the next tile generated
 function MapGen:next()
     return rnd(MapGen)
 end

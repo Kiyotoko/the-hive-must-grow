@@ -1,7 +1,18 @@
+---@diagnostic disable: lowercase-global
 require("table")
 require("utils")
 require("map")
 require("buildings")
+
+rnd = function (table) return 0 end
+poke = function (mem, val) end
+palt = function (color, visible) end
+btn = function (num) return false end
+stat = function (mem) return 0 end
+cls = function () end
+camera = function (x, y) end
+spr = function (sprite, x, y) end
+flr = function (num) return math.floor(num) end
 
 local vec2 = Vec2.new{ x=3 }
 print(vec2)
