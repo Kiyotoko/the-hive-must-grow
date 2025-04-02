@@ -1,69 +1,52 @@
---- Building is the super class of bells and co.
+--- Building is the super class of Belts and co.
 Building = {}
 Building.__index = Building
-
-BuildOptions = List.new()
-BuildOptions:add(1)
-BuildOptions:add(3)
-BuildOptions:add(5)
-BuildOptions:add(17)
-
-SelectedOption = Cycle.new{
-    max=BuildOptions:len()
-}
 
 function Building.new(vec)
     assert(vec ~= nil)
     local created = {
         items = List.new(),
-        frames = List.new(),
-        display = Cycle.new{},
-        timer = Cycle.new{},
-        pos = vec or Vec2
+        pos = vec
     }
     setmetatable(created, Building)
     return created
 end
 
 function Building:update()
-    self.timer:inc()
-    if self.timer.val == 0 then
-        self.display:inc()
-    end
-end
-
-function Building:free()
-    error("Unimplemented") -- do not call, override instead
+    -- TODO: add imlementation
 end
 
 function Building:draw()
-
-end
-
-function Building:push_frame(frame)
-    self.frames:add(frame)
-    self.display.max = self.frames:len()
+    error("unimplemented")
 end
 
 function Building:__tostring()
     return "Building[]"
 end
 
-Bell = {}
-Bell.__index = Bell
-setmetatable(Bell, Building)
+Belt = {
+    frames = List.new(),
+    timer = Cycle.new{ max=15 },
+    display = Cycle.new{ max=2 }
+}
+Belt.__index = Belt
+Belt.frames:add_all{1, 2}
+setmetatable(Belt, Building)
 
-function Bell.new(vec)
+function Belt.new(vec)
     local created = Building.new(vec)
-    GameBuildings:put(GenKey(created), created)
-    setmetatable(created, Bell)
+    setmetatable(created, Belt)
+    Overlay:set_building(created.pos.x, created.pos.y, created)
+    return created
 end
 
-function Bell:update()
-    print("Hello World!")
+function Belt:draw()
+    spr(Belt.frames:get(Belt.display.val), Tile2Pixel(self.pos.x), Tile2Pixel(self.pos.y))
 end
 
-function GenKey(building)
-    assert(building ~= nil)
-    return building.pos.x .. ":" .. building.pos.y
-end
+BuildOptions = List.new()
+BuildOptions:add_all{Belt.new, Belt.new, Belt.new, Belt.new}
+
+SelectedOption = Cycle.new{
+    max=BuildOptions:len()
+}

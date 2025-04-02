@@ -9,6 +9,7 @@ Cam = {
 function _init()
     -- activate dev mode
     poke(0x5f2d, 1)
+    -- change transparency color
     palt(15, true)
     palt(0, false)
 end
@@ -23,20 +24,28 @@ function _update()
     if btn(5) then SelectedOption:dec() end
 
     if stat(34) > 0 then
-        GameMap:set_field(Vec2.new{
+        local factory = BuildOptions[SelectedOption.val]
+        factory(Vec2.new{
             x=Pixel2Tile(Cam.x + stat(32)-1),
             y=Pixel2Tile(Cam.y + stat(33)-1)
-        }, BuildOptions[SelectedOption.val])
+        })
     end
 
     camera(Cam.x, Cam.y)
+
+    Belt.timer:inc()
+    if Belt.timer.val == 0 then
+        Belt.display:inc()
+    end
 end
 
 function _draw()
     cls()
 
-    GameMap:draw(Rect.new{ x=Pixel2Tile(Cam.x), w=18, h=16 })
-    -- map(0, 0, 0, 0, 16, 16)
+    -- calculate field of view
+    local fov = Rect.new{ x=Pixel2Tile(Cam.x), w=18, h=16 }
+    Underlay:draw(fov)
+    Overlay:draw(fov)
 
     -- draw mouse cursor
     spr(0, Cam.x + stat(32)-1, Cam.y + stat(33)-1)

@@ -2,7 +2,7 @@ pico-8 cartridge // http://www.pico-8.com
 version 42
 __lua__
 -- game
--- by leo and karl
+-- by leo, ella and karl
 
 #include utils.lua
 #include map.lua

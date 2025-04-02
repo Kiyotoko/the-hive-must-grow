@@ -53,6 +53,13 @@ function List:add(e)
     self.__len = self.__len + 1
 end
 
+function List:add_all(table)
+    assert(table ~= nil)
+    for _, value in ipairs(table) do
+        self:add(value)
+    end
+end
+
 function List:set(i, e)
     assert(i < self.__len and i >= 0, "Index out of bounds")
     self[i] = e

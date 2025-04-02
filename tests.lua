@@ -11,7 +11,7 @@ btn = function (num) return false end
 stat = function (mem) return 0 end
 cls = function () end
 camera = function (x, y) end
-spr = function (sprite, x, y) end
+spr = function (sprite, x, y) print("spr(" .. sprite .. "," .. x .. "," .. y .. ")") end
 flr = function (num) return math.floor(num) end
 
 local vec2 = Vec2.new{ x=3 }
@@ -27,7 +27,7 @@ assert(rect.y == 0)
 assert(rect.w == 4)
 assert(rect.h == 4)
 
-GameMap:set_field(vec2, 3)
+Underlay:set_field(vec2, 3)
 -- FIXME: assert(GameMap:get_field(vec2) == 3, "Expected value 3, but got " .. GameMap:get_field(vec2))
 -- assert(GameMap:get_field(Vec2.new{ x=2 }) == DefaultField)
 
@@ -38,9 +38,6 @@ SelectedOption:add(3)
 assert(SelectedOption.val == 0, "Expected value 0, but got " .. SelectedOption:__tostring())
 SelectedOption:dec()
 assert(SelectedOption.val == 3, "Expected value 3, but got " .. SelectedOption:__tostring())
-
-local building = Building.new{}
-print(building)
 
 local list = List.new()
 print(list)
@@ -64,3 +61,9 @@ cycle:add(2)
 assert(cycle.val == 0)
 cycle:dec()
 assert(cycle.val == 2)
+
+local belt = Belt.new(Vec2)
+Overlay:set_building(1, 1, belt)
+assert(Overlay:get_building(0, 0) == belt)
+print(Overlay[0][0])
+Overlay:draw(rect)
