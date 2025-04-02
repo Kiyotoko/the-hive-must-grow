@@ -44,8 +44,49 @@ function Belt:draw()
     spr(Belt.frames:get(Belt.display.val), Tile2Pixel(self.pos.x), Tile2Pixel(self.pos.y))
 end
 
+Drill = {
+    frames = List.new(),
+    timer = Cycle.new{ max=5 },
+    display = Cycle.new{}
+}
+Drill.__index = Drill
+Drill.frames:add_all{
+    Vec2.new{ y=3 },
+    Vec2.new{ x=3, y=3 },
+    Vec2.new{ x=6, y=3 }
+}
+Drill.display.max = Drill.frames:len()
+
+function Drill.new(vec)
+    local created = Building.new(vec)
+    setmetatable(created, Drill)
+    Overlay:set_building(created.pos.x, created.pos.y, created)
+    return created
+end
+
+function Drill:draw()
+    local frame = Drill.frames:get(Drill.display.val)
+    map(frame.x, frame.y, Tile2Pixel(self.pos.x), Tile2Pixel(self.pos.y), 3, 3 )
+end
+
+Processor = {
+
+}
+Processor.__index = Processor
+
+function Processor.new(vec)
+    local created = Building.new(vec)
+    setmetatable(created, Processor)
+    Overlay:set_building(created.pos.x, created.pos.y)
+    return created
+end
+
+function Processor:draw()
+    spr(17, Tile2Pixel(self.pos.x), Tile2Pixel(self.pos.y))
+end
+
 BuildOptions = List.new()
-BuildOptions:add_all{Belt.new, Belt.new, Belt.new, Belt.new}
+BuildOptions:add_all{Belt.new, Drill.new, Processor.new}
 
 SelectedOption = Cycle.new{
     max=BuildOptions:len()

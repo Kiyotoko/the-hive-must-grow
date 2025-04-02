@@ -43,6 +43,10 @@ function _update()
     if Belt.timer.val == 0 then
         Belt.display:inc()
     end
+    Drill.timer:inc()
+    if Drill.timer.val == 0 then
+        Drill.display:inc()
+    end
 end
 
 function _draw()

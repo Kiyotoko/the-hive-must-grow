@@ -12,6 +12,8 @@ stat = function (mem) return 0 end
 cls = function () end
 camera = function (x, y) end
 spr = function (sprite, x, y) print("spr(" .. sprite .. "," .. x .. "," .. y .. ")") end
+---Draws a portion of the map to the graphics buffer.
+map = function (celx, cely, sx, sy, celw, celh) print("map()") end
 flr = function (num) return math.floor(num) end
 
 local vec2 = Vec2.new{ x=3 }
@@ -31,13 +33,13 @@ Underlay:set_field(vec2, 3)
 -- FIXME: assert(GameMap:get_field(vec2) == 3, "Expected value 3, but got " .. GameMap:get_field(vec2))
 -- assert(GameMap:get_field(Vec2.new{ x=2 }) == DefaultField)
 
-assert(BuildOptions:len() == 4)
+assert(BuildOptions:len() == 3)
 SelectedOption:inc()
 assert(SelectedOption.val == 1, "Expected value 1, but got " .. SelectedOption:__tostring())
-SelectedOption:add(3)
+SelectedOption:add(2)
 assert(SelectedOption.val == 0, "Expected value 0, but got " .. SelectedOption:__tostring())
 SelectedOption:dec()
-assert(SelectedOption.val == 3, "Expected value 3, but got " .. SelectedOption:__tostring())
+assert(SelectedOption.val == 2, "Expected value 2, but got " .. SelectedOption:__tostring())
 
 local list = List.new()
 print(list)
