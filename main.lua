@@ -9,6 +9,8 @@ Cam = {
 function _init()
     -- activate dev mode
     poke(0x5f2d, 1)
+    palt(16, true)
+    palt(0, false)
 end
 
 function _update()
@@ -17,14 +19,14 @@ function _update()
     -- deactivate y axis control
     -- if btn(2) then cam.y = cam.y + 1 end
     -- if btn(3) then cam.y = cam.y - 1 end
-    if btn(4) then SelectedOption = (SelectedOption + 1) % BuildOptions:len() end
-    if btn(5) then SelectedOption = (SelectedOption + BuildOptions:len() - 1) % BuildOptions:len() end
+    if btn(4) then SelectedOption:inc() end
+    if btn(5) then SelectedOption:dec() end
 
     if stat(34) > 0 then
         GameMap:set_field(Vec2.new{
             x=Pixel2Tile(Cam.x + stat(32)-1),
             y=Pixel2Tile(Cam.y + stat(33)-1)
-        }, BuildOptions[SelectedOption])
+        }, BuildOptions[SelectedOption.val])
     end
 
     camera(Cam.x, Cam.y)

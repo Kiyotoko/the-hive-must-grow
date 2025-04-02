@@ -1,44 +1,69 @@
--- Define a class
+--- Building is the super class of bells and co.
 Building = {}
-Building.__index = Building  -- Set metatable index to itself
+Building.__index = Building
 
 BuildOptions = List.new()
-BuildOptions:add(48)
-BuildOptions:add(32)
-BuildOptions:add(49)
+BuildOptions:add(1)
+BuildOptions:add(3)
+BuildOptions:add(5)
+BuildOptions:add(17)
 
-SelectedOption = 0
+SelectedOption = Cycle.new{
+    max=BuildOptions:len()
+}
 
--- Constructor
-function Building.new(data)
-    assert(data ~= nil)
-    local created = {}
-    setmetatable(created, Building)  -- Set metatable
-    created.tile = data.tile or DefaultField
-    created.items = List.new()
+function Building.new(vec)
+    assert(vec ~= nil)
+    local created = {
+        items = List.new(),
+        frames = List.new(),
+        display = Cycle.new{},
+        timer = Cycle.new{},
+        pos = vec or Vec2
+    }
+    setmetatable(created, Building)
     return created
 end
 
-function Building:place(pos)
-    self.pos = pos or Vec2
-    self.rotation = 0 -- TODO: add current roatition value
+function Building:update()
+    self.timer:inc()
+    if self.timer.val == 0 then
+        self.display:inc()
+    end
 end
 
-function Building:update()
+function Building:free()
     error("Unimplemented") -- do not call, override instead
 end
 
-function Building:__tostring()
-    return "Building[" .. (self.pos ~= nil and self.pos:__tostring() or "nil") .. ", " .. self.tile .. ", " .. (self.items[0] ~= nil and "some" or "none").. "]"
+function Building:draw()
+
 end
 
-Bell = Building.new{ tile=48 }
+function Building:push_frame(frame)
+    self.frames:add(frame)
+    self.display.max = self.frames:len()
+end
 
-function Bell.new()
-    local created = {}
+function Building:__tostring()
+    return "Building[]"
+end
+
+Bell = {}
+Bell.__index = Bell
+setmetatable(Bell, Building)
+
+function Bell.new(vec)
+    local created = Building.new(vec)
+    GameBuildings:put(GenKey(created), created)
     setmetatable(created, Bell)
 end
 
 function Bell:update()
     print("Hello World!")
+end
+
+function GenKey(building)
+    assert(building ~= nil)
+    return building.pos.x .. ":" .. building.pos.y
 end

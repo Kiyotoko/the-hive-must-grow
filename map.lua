@@ -1,8 +1,19 @@
+MapGen = {
+    8,
+    24,
+    24,
+    40,
+    40,
+    40,
+    40
+}
+
+function MapGen:next()
+    return rnd(MapGen)
+end
+
 ---The game map is the instance we use to dynamically and infinitly add new tiles to our world.
 GameMap = {}
-
----This is the element number of the tile we use as a default value.
-DefaultField = 32
 
 ---Set the field of the game map.
 ---@param pos table the position of the field you want to change
@@ -29,10 +40,11 @@ end
 
 function GameMap:get_field0(x, y)
     if self[x] == nil then
-        return DefaultField
-    else
-        return self[x][y] or DefaultField
+        self:set_field0(x, y, MapGen:next())
+    elseif self[x][y] == nil then
+        self:set_field0(x, y, MapGen:next())
     end
+    return self[x][y]
 end
 
 ---Draws an area of the map to the display.
@@ -42,6 +54,30 @@ function GameMap:draw(rect)
         for r = rect.y, rect.y + rect.h do
             spr(self:get_field0(c, r), Tile2Pixel(c), Tile2Pixel(r))
         end
+    end
+end
+
+GameBuildings = {}
+
+function GameBuildings:put(key, building)
+    assert(key ~= nil and building ~= nil)
+    GameBuildings[key] = building
+end
+
+function GameBuildings:get(key)
+    assert(key ~= nil)
+    return GameBuildings[key]
+end
+
+function GameBuildings:update()
+    for _, value in pairs(self) do
+        value:update()
+    end
+end
+
+function GameBuildings:draw()
+    for _, value in pairs(self) do
+        value:draw()
     end
 end
 

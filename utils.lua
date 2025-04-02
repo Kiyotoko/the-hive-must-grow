@@ -95,3 +95,35 @@ function List:__tostring()
     end
 end
 
+Cycle = {}
+Cycle.__index = Cycle  -- Set metatable index to itself
+
+-- Constructor
+function Cycle.new(data)
+    assert(data ~= nil)
+    local created = {}  -- Create a new object (table)
+    setmetatable(created, Cycle)  -- Set metatable
+    created.val = data.val or 0
+    created.max = data.max or 1
+    return created
+end
+
+function Cycle:inc()
+    self:add(1)
+end
+
+function Cycle:dec()
+    self:add(self.max - 1)
+end
+
+function Cycle:add(val)
+    self.val = (self.val + val) % self.max
+end
+
+function Cycle:reset()
+    self.val = 0
+end
+
+function Cycle:__tostring()
+    return "Cycle[" .. self.val .. "/" .. self.max .. "]"
+end

@@ -9,7 +9,7 @@ test:
 install:
 	# copy new game files
 	@mkdir -p ${path}
-	@cp "game.p8" ./*.lua ${path}
+	@cp "game.p8" ./*.lua "spritesheet.png" ${path}
 
 clean:
 	# remove old files
