@@ -23,12 +23,18 @@ function _update()
     if btn(4) then SelectedOption:inc() end
     if btn(5) then SelectedOption:dec() end
 
-    if stat(34) > 0 then
-        local factory = BuildOptions[SelectedOption.val]
-        factory(Vec2.new{
+    local mouse = stat(34)
+    if mouse > 0 then
+        local tile = Vec2.new{
             x=Pixel2Tile(Cam.x + stat(32)-1),
             y=Pixel2Tile(Cam.y + stat(33)-1)
-        })
+        }
+        if mouse == 1 then
+            local factory = BuildOptions[SelectedOption.val]
+            factory(tile)
+        else
+            Overlay:pop_building(tile.x, tile.y)
+        end
     end
 
     camera(Cam.x, Cam.y)

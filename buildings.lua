@@ -26,7 +26,7 @@ end
 
 Belt = {
     frames = List.new(),
-    timer = Cycle.new{ max=15 },
+    timer = Cycle.new{ max=5 },
     display = Cycle.new{ max=2 }
 }
 Belt.__index = Belt

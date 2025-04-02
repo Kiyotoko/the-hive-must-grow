@@ -75,6 +75,15 @@ function Overlay:get_building(x, y)
     return self[x][y]
 end
 
+function Overlay:pop_building(x, y)
+    local val = self[x]
+    if val ~= nil then
+        val = val[y]
+        self[x][y] = nil
+    end
+    return val
+end
+
 function Overlay:draw(rect)
     for c = rect.x, rect.x + rect.w do
         for r = rect.y, rect.y + rect.h do
