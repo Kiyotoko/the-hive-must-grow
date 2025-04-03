@@ -104,10 +104,11 @@ function Overlay:draw(rect)
     end
 end
 
+---@class Entities: List
 Entities = List.new()
 
 function Entities:update()
-    for i = 0, self:len() do
+    for i = 0, self:len()-1 do
         self:get(i):update()
     end
 end

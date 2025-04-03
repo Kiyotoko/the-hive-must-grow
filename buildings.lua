@@ -1,4 +1,8 @@
---- Building is the super class of Belts and co.
+---Building is the super class of Belts and co.
+---@class Building
+---@field items List the list of items that is stored in this building
+---@field pos Vec2 the position of the top left corner of this building
+---@field new function the constructor of the class
 Building = {
   icon = {
     timer = Cycle.new{ max = 5 },
@@ -7,6 +11,9 @@ Building = {
 }
 Building.__index = Building
 
+---Creates a new building
+---@param vec Vec2
+---@return Building
 function Building.new(vec)
     assert(vec ~= nil)
     local created = {
@@ -29,30 +36,7 @@ function Building:__tostring()
     return "Building[]"
 end
 
-Belt = {
-    frames = List.new(),
-    icon = {
-      frames = List.new()
-    },
-    timer = Cycle.new{ max=5 },
-    display = Cycle.new{ max=2 }
-}
-Belt.__index = Belt
-Belt.frames:add_all{1, 2}
-Belt.icon.frames:add_all{1, 2}
-setmetatable(Belt, Building)
-
-function Belt.new(vec)
-    local created = Building.new(vec)
-    setmetatable(created, Belt)
-    Overlay:set_building(created.pos.x, created.pos.y, created)
-    return created
-end
-
-function Belt:draw()
-    spr(Belt.frames:get(Belt.display.val), Tile2Pixel(self.pos.x), Tile2Pixel(self.pos.y))
-end
-
+---@class Drill: Building
 Drill = {
     frames = List.new(),
     icon = {
@@ -98,6 +82,7 @@ function Drill:draw()
     map(frame.x, frame.y, Tile2Pixel(self.pos.x), Tile2Pixel(self.pos.y), 3, 3 )
 end
 
+---@class Processor: Building
 Processor = {
   icon = {
     frames = List.new()
@@ -117,12 +102,11 @@ function Processor:draw()
     spr(17, Tile2Pixel(self.pos.x), Tile2Pixel(self.pos.y))
 end
 
+---Build options is the list of all possible classes that extend from building that the user can build.
 BuildOptions = List.new()
-BuildOptions:add_all{Belt.new, Drill.new, Processor.new}
-
-BuildClassOptions = List.new()
-BuildClassOptions:add_all{Belt, Drill, Processor}
+BuildOptions:add_all{Drill, Processor, Processor}
 
 SelectedOption = Cycle.new{
     max=BuildOptions:len()
 }
+SwitchCooldown = Cycle.new{max=15}

@@ -7,8 +7,9 @@ __lua__
 #include utils.lua
 #include map.lua
 #include buildings.lua
-#include main.lua
+#include hive.lua
 #include ui.lua
+#include main.lua
 
 __gfx__
 f77fffffdddddddddddddddddeeeeeeddedddded0660066006666660ffffffffbbbbbbbbbbb9aaaaaaaaaaaaaaaaaaaafffffffff000000ff000000ff000000f

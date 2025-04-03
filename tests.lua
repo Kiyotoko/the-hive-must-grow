@@ -3,6 +3,7 @@ require("table")
 require("utils")
 require("map")
 require("buildings")
+require("hive")
 
 rnd = function (table) return 0 end
 poke = function (mem, val) end
@@ -13,13 +14,19 @@ cls = function () end
 camera = function (x, y) end
 spr = function (sprite, x, y) print("spr(" .. sprite .. "," .. x .. "," .. y .. ")") end
 ---Draws a portion of the map to the graphics buffer.
-map = function (celx, cely, sx, sy, celw, celh) print("map()") end
+map = function (celx, cely, sx, sy, celw, celh) print("map(" .. celx .. "," .. cely .. "," .. sx .. "," .. sy .. "," .. celw .. "," .. celh .. ")") end
 flr = function (num) return math.floor(num) end
+rectfill = function (x, y, w, h, c) end
+sqrt = function (num) return math.sqrt(num) end
+atan2 = function (y, x) return math.atan(y, x) end
+sin = function (a) return math.sin(a) end
+cos = function (a) return math.cos(a) end
 
 local vec2 = Vec2.new{ x=3 }
 print(vec2)
 assert(vec2.x == 3)
 assert(vec2.y == 0)
+---@diagnostic disable-next-line: undefined-field
 assert(vec2.z == nil)
 
 local rect = Rect.new{ w=4, h=4 }
@@ -32,14 +39,6 @@ assert(rect.h == 4)
 Underlay:set_field(vec2, 3)
 -- FIXME: assert(GameMap:get_field(vec2) == 3, "Expected value 3, but got " .. GameMap:get_field(vec2))
 -- assert(GameMap:get_field(Vec2.new{ x=2 }) == DefaultField)
-
-assert(BuildOptions:len() == 3)
-SelectedOption:inc()
-assert(SelectedOption.val == 1, "Expected value 1, but got " .. SelectedOption:__tostring())
-SelectedOption:add(2)
-assert(SelectedOption.val == 0, "Expected value 0, but got " .. SelectedOption:__tostring())
-SelectedOption:dec()
-assert(SelectedOption.val == 2, "Expected value 2, but got " .. SelectedOption:__tostring())
 
 local list = List.new()
 print(list)
@@ -64,8 +63,9 @@ assert(cycle.val == 0)
 cycle:dec()
 assert(cycle.val == 2)
 
-local belt = Belt.new(Vec2)
-Overlay:set_building(1, 1, belt)
-assert(Overlay:get_building(0, 0) == belt)
-print(Overlay[0][0])
-Overlay:draw(rect)
+local worker = Worker.new(Zero)
+worker.des:add(Vec2.new{ x=4, y=4 })
+worker:move()
+print(worker.pos)
+worker:move()
+print(worker.pos)
