@@ -71,8 +71,24 @@ Drill.icon.frames:add_all{21, 22}
 Drill.display.max = Drill.frames:len()
 
 function Drill.new(vec)
+    -- check if a building is already present
+    for x = -1, 1 do
+        for y = -1, 1 do
+            if Overlay:get_building(vec.x + x, vec.y + y) ~= nil then
+                -- another building is already build at this place, we can not create a new drill at this position
+                return nil
+            end
+        end
+    end
+
     local created = Building.new(vec)
     setmetatable(created, Drill)
+    -- fill all blocked positions with dummies
+    for x = -1, 1 do
+        for y = -1, 1 do
+            Overlay:set_building(created.pos.x + x, created.pos.y + y, Dummy)
+        end
+    end
     Overlay:set_building(created.pos.x, created.pos.y, created)
     return created
 end

@@ -42,10 +42,12 @@ function _update()
     }
     -- LMB
     if mouse == 1 then
-        local factory = BuildOptions[SelectedOption.val]
-        factory(tile)
+        if Overlay:get_building(tile.x, tile.y) == nil then
+            local factory = BuildOptions[SelectedOption.val]
+            factory(tile)
+        end
     -- RMB
-    elseif mouse > 0 then
+    elseif mouse == 2 then
         Overlay:pop_building(tile.x, tile.y)
     end
 
