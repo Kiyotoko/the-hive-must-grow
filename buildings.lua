@@ -1,5 +1,10 @@
 --- Building is the super class of Belts and co.
-Building = {}
+Building = {
+  icon = {
+    timer = Cycle.new{ max = 5 },
+    display = Cycle.new{ max = 2 },
+  }
+}
 Building.__index = Building
 
 function Building.new(vec)
@@ -26,11 +31,15 @@ end
 
 Belt = {
     frames = List.new(),
+    icon = {
+      frames = List.new()
+    },
     timer = Cycle.new{ max=5 },
     display = Cycle.new{ max=2 }
 }
 Belt.__index = Belt
 Belt.frames:add_all{1, 2}
+Belt.icon.frames:add_all{1, 2}
 setmetatable(Belt, Building)
 
 function Belt.new(vec)
@@ -46,6 +55,9 @@ end
 
 Drill = {
     frames = List.new(),
+    icon = {
+      frames = List.new(),
+    },
     timer = Cycle.new{ max=5 },
     display = Cycle.new{}
 }
@@ -55,6 +67,7 @@ Drill.frames:add_all{
     Vec2.new{ x=3, y=3 },
     Vec2.new{ x=6, y=3 }
 }
+Drill.icon.frames:add_all{21, 22}
 Drill.display.max = Drill.frames:len()
 
 function Drill.new(vec)
@@ -70,9 +83,12 @@ function Drill:draw()
 end
 
 Processor = {
-
+  icon = {
+    frames = List.new()
+  },
 }
 Processor.__index = Processor
+Processor.icon.frames:add_all{0, 16}
 
 function Processor.new(vec)
     local created = Building.new(vec)
@@ -87,6 +103,9 @@ end
 
 BuildOptions = List.new()
 BuildOptions:add_all{Belt.new, Drill.new, Processor.new}
+
+BuildClassOptions = List.new()
+BuildClassOptions:add_all{Belt, Drill, Processor}
 
 SelectedOption = Cycle.new{
     max=BuildOptions:len()

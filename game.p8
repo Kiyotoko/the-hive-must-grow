@@ -8,6 +8,7 @@ __lua__
 #include map.lua
 #include buildings.lua
 #include main.lua
+#include ui.lua
 
 __gfx__
 f77fffffdddddddddddddddddeeeeeeddedddded0660066006666660ffffffffbbbbbbbbbbb9aaaaaaaaaaaaaaaaaaaafffffffff000000ff000000ff000000f
