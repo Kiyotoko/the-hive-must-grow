@@ -22,11 +22,11 @@ function _update()
     -- if btn(3) then cam.y = cam.y - 1 end
     if SwitchCooldown.val == 0 then
         if btn(4) then
-            SwitchCooldown:inc()
+            SelectedOption:inc()
             SwitchCooldown.val = 1
         end
         if btn(5) then
-            SwitchCooldown:dec()
+            SelectedOption:dec()
             SwitchCooldown.val = 1
         end
     else
@@ -75,9 +75,10 @@ function _draw()
     cls()
 
     -- calculate field of view
-    local fov = Rect.new{ x=Pixel2Tile(Cam.x), w=16, h=13 }
+    local fov = Rect.new{ x=Pixel2Tile(Cam.x)-1, w=18, h=12 }
     Underlay:draw(fov)
     Overlay:draw(fov)
+    Queen:draw()
 
     UI:draw()
     -- draw mouse cursor

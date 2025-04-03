@@ -73,7 +73,7 @@ function Drill.new(vec)
             Overlay:set_building(created.pos.x + x, created.pos.y + y, Dummy)
         end
     end
-    Overlay:set_building(created.pos.x, created.pos.y, created)
+    Overlay:set_building(created.pos.x-1, created.pos.y-1, created)
     return created
 end
 
@@ -89,12 +89,12 @@ Processor = {
   },
 }
 Processor.__index = Processor
-Processor.icon.frames:add_all{0, 16}
+Processor.icon.frames:add_all{17, 17}
 
 function Processor.new(vec)
     local created = Building.new(vec)
     setmetatable(created, Processor)
-    Overlay:set_building(created.pos.x, created.pos.y)
+    Overlay:set_building(created.pos.x, created.pos.y, created)
     return created
 end
 
@@ -104,7 +104,7 @@ end
 
 ---Build options is the list of all possible classes that extend from building that the user can build.
 BuildOptions = List.new()
-BuildOptions:add_all{Drill, Processor, Processor}
+BuildOptions:add_all{Drill, Processor}
 
 SelectedOption = Cycle.new{
     max=BuildOptions:len()

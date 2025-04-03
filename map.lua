@@ -69,9 +69,10 @@ end
 Overlay = {}
 
 ---The dummy value is used to block other fields where the player should not be able to build.
-Dummy = Building
+Dummy = { draw = function () end }
 
 function Overlay:set_building(x, y, b)
+    assert(b ~= nil)
     if self[x] == nil then
         self[x] = { [y]=b }
     else

@@ -1,9 +1,9 @@
 UI = {
-  height = 3,      -- tiles
-  padding = 3,     -- px
+  height = 3*8,
+  padding = 3,
   timer = {
-    width = 50,    -- px
-    height = 2,    -- px
+    width = 50,
+    height = 2,
     colors = { 8, 9, 10 }
   }
 }
@@ -13,15 +13,15 @@ end
 
 function UI:draw()
   -- black background
-  rectfill(Cam.x, 128 - Tile2Pixel(UI.height), Cam.x + 128, 128, 0)
+  rectfill(Cam.x, 128 - UI.height, Cam.x + 128, 128, 0)
 
   -- timers
-  local step = flr((Tile2Pixel(UI.height) - 2 * UI.padding) / #Queen.goals)
+  local step = flr((UI.height - 2 * UI.padding) / #Queen.goals)
   local counter = 0
   for i = 1, #Queen.goals do
     local pos = { -- top left corner of timer
       x = Cam.x + UI.padding,
-      y = 128 - Tile2Pixel(UI.height) + UI.padding + counter * step
+      y = 128 - UI.height + UI.padding + counter * step
     }
     -- timer label
     print(Queen.goal_names[i], pos.x + UI.timer.width + UI.padding, pos.y-2, UI.timer.colors[i] or 3)
