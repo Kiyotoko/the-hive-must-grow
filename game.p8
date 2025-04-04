@@ -6,8 +6,12 @@ __lua__
 
 #include utils.lua
 #include map.lua
+#include terrain.lua
 #include buildings.lua
+<<<<<<< HEAD
 #include hive.lua
+=======
+>>>>>>> 20f552a (start terrain gen, update sprite sheet)
 #include ui.lua
 #include main.lua
 
