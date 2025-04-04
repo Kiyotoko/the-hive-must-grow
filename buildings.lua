@@ -49,7 +49,8 @@ Drill.__index = Drill
 Drill.frames:add_all{
     Vec2.new{ y=3 },
     Vec2.new{ x=3, y=3 },
-    Vec2.new{ x=6, y=3 }
+    Vec2.new{ x=6, y=3 },
+    Vec2.new{ x=9, y=3 }
 }
 Drill.icon.frames:add_all{21, 22}
 Drill.display.max = Drill.frames:len()

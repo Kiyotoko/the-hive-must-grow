@@ -2,7 +2,7 @@ debug = 0
 Terrain = {
   chunk = {w = 128, h = 104},
   chunks = {},
-  chunkmap = {}
+  chunkmap = {},
   smoothing = 3,
   current = {},
   dx = 8
