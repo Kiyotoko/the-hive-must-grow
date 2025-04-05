@@ -93,4 +93,4 @@ BuildOptions:add_all{Drill, Processor}
 SelectedOption = Cycle.new{
     max=BuildOptions:len()
 }
-SwitchCooldown = Cycle.new{max=15}
+SwitchCooldown = Cycle.new{max=8}

@@ -1,10 +1,12 @@
 ---@diagnostic disable: lowercase-global
--- offset of the camera
+---Offset and speed of the camera.
 Cam = {
     x = 0,
     y = 0,
     speed = 5
 }
+ControlMode = false
+AnimationTimer = Cycle.new{ max=8 }
 
 function _init()
     -- activate dev mode
@@ -17,17 +19,17 @@ end
 function _update()
     if btn(0) then Cam.x = Cam.x - Cam.speed end
     if btn(1) then Cam.x = Cam.x + Cam.speed end
-    -- deactivate y axis control
-    -- if btn(2) then cam.y = cam.y + 1 end
-    -- if btn(3) then cam.y = cam.y - 1 end
     if SwitchCooldown.val == 0 then
-        if btn(4) then
+        if btn(2) then
             SelectedOption:inc()
             SwitchCooldown.val = 1
         end
-        if btn(5) then
+        if btn(3) then
             SelectedOption:dec()
             SwitchCooldown.val = 1
+        end
+        if btn(4) then
+            ControlMode = not ControlMode
         end
     else
         SwitchCooldown:inc()
@@ -70,6 +72,13 @@ function _update()
 end
 
 function _draw()
+    AnimationTimer:inc()
+    if AnimationTimer.val == 0 then
+        for i = 0, BuildOptions:len()-1 do
+            BuildOptions:get(i).display:inc()
+        end
+    end
+
     cls()
 
     -- calculate field of view
