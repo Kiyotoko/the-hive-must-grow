@@ -6,6 +6,8 @@ Cam = {
     speed = 5
 }
 ControlMode = false
+---@type Worker?
+SelectedWorker = nil
 AnimationTimer = Cycle.new{ max=8 }
 
 function _init()
@@ -30,35 +32,60 @@ function _update()
         end
         if btn(4) then
             ControlMode = not ControlMode
+            SwitchCooldown.val = 1
         end
     else
         SwitchCooldown:inc()
     end
 
     local mouse = stat(34)
+    local pos = Vec2.new{
+            x=Cam.x + stat(32)-1,
+            y=Cam.y + stat(33)-1
+    }
     if mouse > 0 then
-        -- current moused tile
-        local tile = Vec2.new{
-                x=Pixel2Tile(Cam.x + stat(32)-1),
-                y=Pixel2Tile(Cam.y + stat(33)-1)
-        }
-        -- LMB
-        if mouse == 1 then
-            if Overlay:get_building(tile.x, tile.y) == nil then
-                local option = BuildOptions[SelectedOption.val]
-                local call = function ()
-                    for dx = 0, option.dim.x-1 do
-                        for dy = 0, option.dim.y-1 do
-                            if Overlay:get_building(tile.x + dx, tile.y + dy) ~= nil then return end
-                        end
+        if ControlMode then
+            -- TODO: control the hive!
+            if mouse == 1 then
+                -- we start by the index 1 and NOT 0, because the queen is always
+                -- located at index 0 and we do not want to control or move the queen.
+                SelectedWorker = nil -- deselect previously selected worker
+                for i = 1, Creatures:len()-1 do
+                    local creature = Creatures:get(i)
+                    assert(creature ~= nil, "Creature should not be nil")
+                    if creature.pos.x < pos.x and pos.x < creature.pos.x + 8
+                    and creature.pos.y < pos.y and pos.y < creature.pos.y + 8 then
+                        SelectedWorker = creature
+                        break
                     end
-                    option.new(tile)
                 end
-                call()
+            elseif mouse == 2 and SelectedWorker ~= nil then
+                SelectedWorker.des:add(pos)
             end
-        -- RMB
-        elseif mouse == 2 then
-            Overlay:pop_building(tile.x, tile.y)
+        else
+            -- current moused tile
+            local tile = Vec2.new{
+                    x=Pixel2Tile(pos.x),
+                    y=Pixel2Tile(pos.y)
+            }
+            -- LMB
+            if mouse == 1 then
+                if Overlay:get_building(tile.x, tile.y) == nil then
+                    local option = BuildOptions[SelectedOption.val]
+                    local call = function ()
+                        for dx = 0, option.dim.x-1 do
+                            for dy = 0, option.dim.y-1 do
+                                if Overlay:get_building(tile.x + dx, tile.y + dy) ~= nil then return end
+                            end
+                        end
+                        option.new(tile)
+                    end
+                    call()
+                end
+            -- RMB
+            elseif mouse == 2 then
+                Overlay:pop_building(tile.x, tile.y)
+            end
         end
     end
 
@@ -73,6 +100,7 @@ end
 
 function _draw()
     AnimationTimer:inc()
+    Worker.display:inc()
     if AnimationTimer.val == 0 then
         for i = 0, BuildOptions:len()-1 do
             BuildOptions:get(i).display:inc()

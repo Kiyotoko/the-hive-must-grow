@@ -17,14 +17,21 @@ end
 ---@class Worker
 ---@field des List
 ---@field pos Vec2
-Worker = {}
+Worker = {
+    frames = List.new(),
+    display = Cycle.new{}
+}
 Worker.__index = Worker
+Worker.frames:add_all{9, 10}
+Worker.display.max = Worker.frames:len()
 
 function Worker.new(pos)
+    assert(pos ~= nil)
     local created = {}
     setmetatable(created, Worker)
     created.des = List.new()
     created.pos = pos
+    print(created.pos)
     Creatures:add(created)
     return created
 end
@@ -52,7 +59,12 @@ function Worker:move()
 end
 
 function Worker:draw()
-    spr(9, self.pos.x, self.pos.y)
+    local tile = Worker.frames:get(Worker.display.val)
+    if self.des:len() > 0 then
+        spr(tile, self.pos.x, self.pos.y, 1.0, 1.0, self.pos.x > self.des:get(0).x)
+    else
+        spr(tile, self.pos.x, self.pos.y)
+    end
 end
 
 -- TODO: these bees are only created for testing
@@ -71,7 +83,9 @@ Queen = {
         "DRINK",
         "EAT",
         "HAT"
-    }
+    },
+    pos = Vec2.new{ x=5, y=7},
+    des = List.new()
 }
 Creatures:add(Queen)
 

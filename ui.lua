@@ -10,7 +10,8 @@ UI = {
 
 function UI:draw()
   -- black background
-  rectfill(Cam.x, 128 - UI.height, Cam.x + 128, 128, 0)
+  -- FIXME: rectfill(Cam.x, 128 - UI.height, Cam.x + 128, 128, 0)
+  rectfill(Cam.x, 128 - UI.height, 128, 128, 0)
 
   -- timers
   local step = flr((UI.height - 2 * UI.padding) / #Queen.goals)
@@ -31,6 +32,10 @@ function UI:draw()
     )
     counter = counter + 1
   end
+
+  -- print mode
+  print(ControlMode and "CONTROL" or "BUILD", Cam.x + 100, 105, 7)
+
   -- draw indicator bg 
   rectfill(Cam.x + 118, 118, Cam.x + 128, 128, 7)
   -- draw current building 
