@@ -9,9 +9,10 @@ Building = {}
 Building.__index = Building
 
 ---Creates a new building
+---@generic T : table
 ---@param pos Vec2
----@param class Building the subclass to use
----@return Building
+---@param class T the subclass to use
+---@return T
 function Building.new(pos, class)
     assert(pos ~= nil)
     local created = {
@@ -25,6 +26,7 @@ function Building.new(pos, class)
         end
     end
     Overlay:set_building(created.pos.x, created.pos.y, created)
+    Player.buildings:add(created)
     setmetatable(created, class)
     return created
 end
@@ -37,66 +39,115 @@ function Building:draw()
     error("unimplemented")
 end
 
----@class Drill: Building
-Drill = {
-    frames = List.new(),
+---@class Hive: Building
+Hive = {
+    frames = List.from{
+        Vec2.new{ y=3 },
+        Vec2.new{ x=3, y=3 },
+        Vec2.new{ x=6, y=3 },
+        Vec2.new{ x=9, y=3 }
+    },
     display = Cycle.new{},
     dim = Vec2.new{ x=3, y=3 },
-    icon = 25
+    icon = 25,
+    price = Inventory.new{
+        stone = 3,
+        honey = 9
+    }
 }
-Drill.__index = Drill
-Drill.frames:add_all{
-    Vec2.new{ y=3 },
-    Vec2.new{ x=3, y=3 },
-    Vec2.new{ x=6, y=3 },
-    Vec2.new{ x=9, y=3 }
+Hive.__index = Hive
+Hive.display.max = Hive.frames:len()
+
+function Hive.new(vec)
+    Bee.new{ x=Tile2Pixel(vec.x+1), y=Tile2Pixel(vec.y+1) }
+    return Building.new(vec, Hive)
+end
+
+function Hive:update()
+
+end
+
+function Hive:draw()
+    local frame = Hive.frames:get(Hive.display.val)
+    map(frame.x, frame.y, Tile2Pixel(self.pos.x), Tile2Pixel(self.pos.y), Hive.dim.x, Hive.dim.y)
+end
+
+---@class Farm: Building
+---@field cooldown Cycle
+Farm = {
+    frames = List.from{
+        Vec2.new{ x=3 },
+        Vec2.new{ x=5 },
+        Vec2.new{ x=7 }
+    },
+    display = Cycle.new{},
+    dim = Vec2.new{ x=2, y=2 },
+    icon = 17,
+    price = Inventory.new{
+        stone = 2,
+        honey = 1
+    }
 }
-Drill.display.max = Drill.frames:len()
+Farm.__index = Farm
+Farm.display.max = Farm.frames:len()
 
-function Drill.new(vec)
-    return Building.new(vec, Drill)
+---Creates a new farm.
+---@param vec any
+---@return Farm
+function Farm.new(vec)
+    local created = Building.new(vec, Farm)
+    created.cooldown = Cycle.new{ max=120 }
+    return created
 end
 
-function Drill:update()
-
+function Farm:update()
+    if self.cooldown.val > 0 then
+        self.cooldown:inc()
+    elseif Underlay:get_field0(self.pos.x+1, self.pos.y+1) ~= RESOURCES.honey then
+        Underlay:set_field0(self.pos.x+1, self.pos.y+1, RESOURCES.honey)
+        self.cooldown:inc()
+    end
 end
 
-function Drill:draw()
-    local frame = Drill.frames:get(Drill.display.val)
-    map(frame.x, frame.y, Tile2Pixel(self.pos.x), Tile2Pixel(self.pos.y), Drill.dim.x, Drill.dim.y)
+function Farm:draw()
+    local frame = Farm.frames:get(Farm.display.val)
+    map(frame.x, frame.y, Tile2Pixel(self.pos.x), Tile2Pixel(self.pos.y), Farm.dim.x, Farm.dim.y)
 end
 
----@class Processor: Building
-Processor = {
-  frames = List.new(),
-  display = Cycle.new{},
-  dim = Vec2.new{ x=2, y=2 },
-  icon = 17
+---@class Storage: Building
+Storage = {
+    frames = List.from{ Vec2.new{ x=9, y=0 }},
+    display = Cycle.new{},
+    dim = Vec2.new{},
+    icon = 22,
+    price = Inventory.new{
+        stone = 4
+    }
 }
-Processor.__index = Processor
-Processor.frames:add_all{
-    Vec2.new{ x=3 },
-    Vec2.new{ x=5 },
-    Vec2.new{ x=7 }
-}
-Processor.display.max = Processor.frames:len()
+Storage.__index = Storage
+Storage.display.max = Storage.frames:len()
 
-function Processor.new(vec)
-    return Building.new(vec, Processor)
+function Storage.new(pos)
+    return Building.new(pos, Storage)
 end
 
-function Processor:update()
-    
+function Storage:update()
+    for bee in Player.bees:iter() do
+        if abs(bee.pos.x - Tile2Pixel(self.pos.x)-4) < 12
+        and abs(bee.pos.y - Tile2Pixel(self.pos.y)-4) < 12 then
+            Player:get_xp(bee.inv.stone + bee.inv.wood + bee.inv.honey)
+            bee.inv:transfer(Player.inv)
+        end
+    end
 end
 
-function Processor:draw()
-    local frame = Processor.frames:get(Processor.display.val)
-    map(frame.x, frame.y, Tile2Pixel(self.pos.x), Tile2Pixel(self.pos.y), Processor.dim.x, Processor.dim.y)
+function Storage:draw()
+    local frame = Storage.frames:get(Storage.display.val)
+    map(frame.x, frame.y, Tile2Pixel(self.pos.x), Tile2Pixel(self.pos.y), Farm.dim.x, Farm.dim.y)
 end
 
 ---Build options is the list of all possible classes that extend from building that the user can build.
-BuildOptions = List.new()
-BuildOptions:add_all{Drill, Processor}
+BuildOptions = List.from{Hive, Farm, Storage}
 
 SelectedOption = Cycle.new{
     max=BuildOptions:len()

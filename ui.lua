@@ -1,19 +1,17 @@
 UI = {
-  height = 3*8,
-  padding = 3,
-  timer = {
-    width = 50,
-    height = 2,
-    colors = { 8, 9, 10 }
-  }
+  height = 12
 }
 
 function UI:draw()
+  print("LVL:   " .. Player.lvl, Cam.x, Cam.y, 7)
+  print("XP:    " .. Player.xp)
+  print("STONE: " .. Player.inv.stone)
+  print("WOOD:  " .. Player.inv.wood)
+  print("HONEY: " .. Player.inv.honey)
   -- black background
-  -- FIXME: rectfill(Cam.x, 128 - UI.height, Cam.x + 128, 128, 0)
-  rectfill(Cam.x, 128 - UI.height, 128, 128, 0)
+  rectfill(Cam.x, Cam.y + 128 - UI.height, Cam.x + 128, Cam.y + 128, 0)
 
-  -- timers
+  --[[
   local step = flr((UI.height - 2 * UI.padding) / #Queen.goals)
   local counter = 0
   for i = 1, #Queen.goals do
@@ -32,13 +30,15 @@ function UI:draw()
     )
     counter = counter + 1
   end
+  ]]
 
   -- print mode
-  print(ControlMode and "CONTROL" or "BUILD", Cam.x + 100, 105, 7)
+  print(ControlMode and "CONTROL" or "BUILD", Cam.x + 5, Cam.y + 121, 7)
 
   -- draw indicator bg 
-  rectfill(Cam.x + 118, 118, Cam.x + 128, 128, 7)
+  rectfill(Cam.x + 80, Cam.y + 118, Cam.x + 90, Cam.y + 127, 7)
   -- draw current building 
-  spr(BuildOptions[SelectedOption.val].icon, Cam.x + 119, 119)
-end
+  spr(BuildOptions[SelectedOption.val].icon, Cam.x + 81, Cam.y + 119)
 
+  -- print(Player.inv.stone .. "|" .. Player.inv.wood .. "|" .. Player.inv.honey, Cam.x + 90, Cam.y + 121, 7)
+end

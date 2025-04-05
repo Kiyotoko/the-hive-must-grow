@@ -33,6 +33,7 @@ rectfill = function (x, y, w, h, col) end
 rect = function (x0, y0, x1, y1, col) end
 circfill = function (x, y, r, col) end
 circ = function (x, y, r, col) end
+line = function (x0, yo, x1, y1, col) end
 
 ---######################
 ---

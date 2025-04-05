@@ -15,4 +15,4 @@ clean:
 	# remove old files
 	@rm -r ${path}
 
-reinstall: install clean
+reinstall: clean install
