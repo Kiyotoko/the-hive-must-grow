@@ -74,13 +74,13 @@ function Drill.new(vec)
             Overlay:set_building(created.pos.x + x, created.pos.y + y, Dummy)
         end
     end
-    Overlay:set_building(created.pos.x-1, created.pos.y-1, created)
+    Overlay:set_building(created.pos.x, created.pos.y, created)
     return created
 end
 
 function Drill:draw()
     local frame = Drill.frames:get(Drill.display.val)
-    map(frame.x, frame.y, Tile2Pixel(self.pos.x), Tile2Pixel(self.pos.y), 3, 3 )
+    map(frame.x, frame.y, Tile2Pixel(self.pos.x-1), Tile2Pixel(self.pos.y-1), 3, 3 )
 end
 
 ---@class Processor: Building
