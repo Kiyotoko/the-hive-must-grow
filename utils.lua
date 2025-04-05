@@ -133,6 +133,10 @@ function List:clear()
     self.__len = 0
 end
 
+function List:is_empty()
+    return self:len() == 0
+end
+
 function List:iter()
     local i = -1
     local l = self:len()

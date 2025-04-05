@@ -30,7 +30,7 @@ function Building.new(pos, class)
 end
 
 function Building:update()
-    -- TODO: add imlementation
+    error("unimplemented")
 end
 
 function Building:draw()
@@ -57,6 +57,10 @@ function Drill.new(vec)
     return Building.new(vec, Drill)
 end
 
+function Drill:update()
+
+end
+
 function Drill:draw()
     local frame = Drill.frames:get(Drill.display.val)
     map(frame.x, frame.y, Tile2Pixel(self.pos.x), Tile2Pixel(self.pos.y), Drill.dim.x, Drill.dim.y)
@@ -79,6 +83,10 @@ Processor.display.max = Processor.frames:len()
 
 function Processor.new(vec)
     return Building.new(vec, Processor)
+end
+
+function Processor:update()
+    
 end
 
 function Processor:draw()
