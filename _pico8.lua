@@ -1,13 +1,11 @@
 ---@meta pico8
 ---@diagnostic disable: lowercase-global
 
-rnd = function (table) return 0 end
-poke = function (mem, val) end
-palt = function (color, visible) end
-btn = function (num) return false end
-stat = function (mem) return 0 end
-cls = function () end
-camera = function (x, y) end
+---######################
+---
+---       GRAPHICS
+--- 
+---######################
 
 ---Draws a sprite, or a range of sprites, on the screen.
 ---@param sprite integer The sprite number. When drawing a range of sprites, this is the upper-left corner.
@@ -20,11 +18,42 @@ camera = function (x, y) end
 spr = function (sprite, x, y, h, w, flip_x, flip_y) print("spr(" .. sprite .. "," .. x .. "," .. y .. ")") end
 ---Draws a portion of the map to the graphics buffer.
 map = function (celx, cely, sx, sy, celw, celh) print("map(" .. celx .. "," .. cely .. "," .. sx .. "," .. sy .. "," .. celw .. "," .. celh .. ")") end
-flr = function (num) return math.floor(num) end
-rectfill = function (x, y, w, h, c) end
+
+palt = function (color, visible) end
+cls = function () end
+camera = function (x, y) end
+
+---######################
+---
+---        SHAPES
+--- 
+---######################
+
+rectfill = function (x, y, w, h, col) end
+rect = function (x0, y0, x1, y1, col) end
+circfill = function (x, y, r, col) end
+circ = function (x, y, r, col) end
+
+---######################
+---
+---         MATH
+--- 
+---######################
+
 sqrt = function (num) return math.sqrt(num) end
 atan2 = function (y, x) return math.atan(y, x) end
 sin = function (a) return math.sin(a) end
 cos = function (a) return math.cos(a) end
-
 abs = function (num) end
+flr = function (num) return math.floor(num) end
+rnd = function (table) return 0 end
+
+---######################
+---
+---        MEMORY
+--- 
+---######################
+
+poke = function (mem, val) end
+stat = function (mem) return 0 end
+btn = function (num) return false end

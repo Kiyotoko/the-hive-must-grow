@@ -1,9 +1,8 @@
-require("table")
-require("pico8")
+require("_pico8")
 require("utils")
+require("player")
 require("map")
 require("buildings")
-require("hive")
 
 local vec2 = Vec2.new{ x=3 }
 print(vec2)
@@ -48,13 +47,3 @@ cycle:add(2)
 assert(cycle.val == 0)
 cycle:dec()
 assert(cycle.val == 2)
-
-local worker = Worker.new(Zero)
-print("======= Worker Positions =======")
-for i = 1, Creatures:len() -1 do
-    print(Creatures:get(i).pos)
-end
-print("================================")
-worker.des:add(Vec2.new{ x=4, y=4 })
-worker:move()
-worker:move()

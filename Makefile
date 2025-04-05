@@ -4,7 +4,7 @@ all: test install
 
 test:
 	# test lua files for errors
-	@lua tests.lua
+	@lua _tests.lua
 
 install:
 	# copy new game files
