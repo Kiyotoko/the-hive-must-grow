@@ -54,6 +54,9 @@ function Worker:move()
             }
         else
             self.pos = self.des:pop(0)
+            if self.des:len() > 0 then
+                self.des:add(next)
+            end
         end
     end
 end
@@ -67,10 +70,6 @@ function Worker:draw()
     end
 end
 
--- TODO: these bees are only created for testing
-Worker.new(Vec2.new{ x=3, y=8 })
-Worker.new(Vec2.new{ x=9, y=2 })
-
 
 ---@class Queen
 Queen = {
@@ -83,11 +82,12 @@ Queen = {
         "DRINK",
         "EAT",
         "HAT"
-    },
-    pos = Vec2.new{ x=5, y=7},
-    des = List.new()
+    }
 }
 Creatures:add(Queen)
+-- TODO: these bees are only created for testing
+Worker.new(Vec2.new{ x=3, y=8 })
+Worker.new(Vec2.new{ x=9, y=2 })
 
 for x = 5, 7 do
     for y = 7, 9 do

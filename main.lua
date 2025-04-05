@@ -60,6 +60,9 @@ function _update()
                     end
                 end
             elseif mouse == 2 and SelectedWorker ~= nil then
+                if not btn(5) then
+                    SelectedWorker.des:clear()
+                end
                 SelectedWorker.des:add(pos)
             end
         else
@@ -72,15 +75,16 @@ function _update()
             if mouse == 1 then
                 if Overlay:get_building(tile.x, tile.y) == nil then
                     local option = BuildOptions[SelectedOption.val]
-                    local call = function ()
-                        for dx = 0, option.dim.x-1 do
-                            for dy = 0, option.dim.y-1 do
-                                if Overlay:get_building(tile.x + dx, tile.y + dy) ~= nil then return end
+                    -- check if there is already a building presend at the position
+                    for dx = 0, option.dim.x-1 do
+                        for dy = 0, option.dim.y-1 do
+                            if Overlay:get_building(tile.x + dx, tile.y + dy) ~= nil then
+                                -- another building is already presend, therefore we directly go to exit
+                                goto exit_mouse
                             end
                         end
-                        option.new(tile)
                     end
-                    call()
+                    option.new(tile)
                 end
             -- RMB
             elseif mouse == 2 then
@@ -88,6 +92,7 @@ function _update()
             end
         end
     end
+    ::exit_mouse::
 
     camera(Cam.x, Cam.y)
 

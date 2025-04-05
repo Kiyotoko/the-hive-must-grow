@@ -120,6 +120,13 @@ function List:pop(i)
     return val
 end
 
+function List:clear()
+    for i = 0, self:len()-1 do
+        self[i] = nil
+    end
+    self.__len = 0
+end
+
 ---@return integer len the len or number of elements of this list
 ---@nodiscard
 function List:len()
