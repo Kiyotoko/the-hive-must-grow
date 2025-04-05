@@ -31,6 +31,9 @@ for e = 1, 5 do
 end
 print(list)
 assert(list:len() == 5)
+for e in list:iter() do
+    print(e)
+end
 assert(list:pop(1) == 2)
 assert(list:pop(2) == 4)
 assert(list:len() == 3)

@@ -67,6 +67,12 @@ function List.new()
     return created
 end
 
+function List.from(data)
+    local created = List.new()
+    created:add_all(data)
+    return created
+end
+
 ---Adds the given element to the end of the list.
 ---@param e any the element to add
 function List:add(e)
@@ -125,6 +131,15 @@ function List:clear()
         self[i] = nil
     end
     self.__len = 0
+end
+
+function List:iter()
+    local i = -1
+    local l = self:len()
+    return function ()
+        i = i+1
+        if i<l then return self[i] end
+    end
 end
 
 ---@return integer len the len or number of elements of this list

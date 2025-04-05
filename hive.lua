@@ -18,11 +18,10 @@ end
 ---@field des List
 ---@field pos Vec2
 Worker = {
-    frames = List.new(),
+    frames = List.from{9, 10},
     display = Cycle.new{}
 }
 Worker.__index = Worker
-Worker.frames:add_all{9, 10}
 Worker.display.max = Worker.frames:len()
 
 function Worker.new(pos)

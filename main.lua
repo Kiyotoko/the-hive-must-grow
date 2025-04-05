@@ -107,8 +107,8 @@ function _draw()
     AnimationTimer:inc()
     Worker.display:inc()
     if AnimationTimer.val == 0 then
-        for i = 0, BuildOptions:len()-1 do
-            BuildOptions:get(i).display:inc()
+        for option in BuildOptions:iter() do
+            option.display:inc()
         end
     end
 
