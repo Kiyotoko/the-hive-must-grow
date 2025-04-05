@@ -8,9 +8,6 @@ UI = {
   }
 }
 
-function UI:update()
-end
-
 function UI:draw()
   -- black background
   rectfill(Cam.x, 128 - UI.height, Cam.x + 128, 128, 0)
@@ -37,6 +34,6 @@ function UI:draw()
   -- draw indicator bg 
   rectfill(Cam.x + 118, 118, Cam.x + 128, 128, 7)
   -- draw current building 
-  spr(BuildOptions[SelectedOption.val].icon.frames:get(Building.icon.display.val), Cam.x + 119, 119)
+  spr(BuildOptions[SelectedOption.val].icon, Cam.x + 119, 119)
 end
 

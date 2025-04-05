@@ -43,8 +43,16 @@ function _update()
         -- LMB
         if mouse == 1 then
             if Overlay:get_building(tile.x, tile.y) == nil then
-                local factory = BuildOptions[SelectedOption.val].new
-                factory(tile)
+                local option = BuildOptions[SelectedOption.val]
+                local call = function ()
+                    for dx = 0, option.dim.x-1 do
+                        for dy = 0, option.dim.y-1 do
+                            if Overlay:get_building(tile.x + dx, tile.y + dy) ~= nil then return end
+                        end
+                    end
+                    option.new(tile)
+                end
+                call()
             end
         -- RMB
         elseif mouse == 2 then
@@ -54,17 +62,7 @@ function _update()
 
     camera(Cam.x, Cam.y)
 
-    Entities:update()
-
-    Building.icon.timer:inc()
-    if Building.icon.timer.val == 0 then
-        Building.icon.display:inc()
-    end
-
-    Drill.timer:inc()
-    if Drill.timer.val == 0 then
-        Drill.display:inc()
-    end
+    Creatures:update()
 
     -- TODO: also check whether Queen has been fed
     -- TODO: game over checks (if timer == 0 && Queen not fed)
@@ -78,7 +76,7 @@ function _draw()
     local fov = Rect.new{ x=Pixel2Tile(Cam.x)-1, w=18, h=12 }
     Underlay:draw(fov)
     Overlay:draw(fov)
-    Queen:draw()
+    Creatures:draw()
 
     UI:draw()
     -- draw mouse cursor

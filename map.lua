@@ -1,18 +1,21 @@
 MapGen = {
-    8,
-    24,
-    40,
-    40,
-    40,
-    40,
-    40,
-    40,
-    40,
-    40,
-    40,
-    40,
-    40,
-    40
+    119,
+    122,
+    134, 134,
+    151,
+    8, 8, 8,
+    24, 24, 24,
+    40, 40, 40, 40, 40,
+    40, 40, 40, 40, 40,
+    40, 40, 40, 40, 40,
+    40, 40, 40, 40, 40,
+    40, 40, 40, 40, 40,
+    40, 40, 40, 40, 40,
+    40, 40, 40, 40, 40,
+    40, 40, 40, 40, 40,
+    40, 40, 40, 40, 40,
+    40, 40, 40, 40, 40,
+    40, 40, 40, 40, 40,
 }
 
 ---Returns the next random tile
@@ -102,15 +105,6 @@ function Overlay:draw(rect)
                 field:draw()
             end
         end
-    end
-end
-
----@class Entities: List
-Entities = List.new()
-
-function Entities:update()
-    for i = 0, self:len()-1 do
-        self:get(i):update()
     end
 end
 

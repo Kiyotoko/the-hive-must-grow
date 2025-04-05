@@ -53,7 +53,7 @@ function Rect:__tostring()
     return "Rect[x=" .. self.x .. ", y=" .. self.y .. ", w=" .. self.w .. ", h=" .. self.h .. "]"
 end
 
----@class List
+---@class List<E>: { [integer]: E }
 List = { __len=0 }
 List.__index = List
 
@@ -139,7 +139,9 @@ function List:__tostring()
 end
 
 ---@class Cycle
-Cycle = { val=0, max=0 }
+---@field val integer
+---@field max integer
+Cycle = {}
 Cycle.__index = Cycle  -- Set metatable index to itself
 
 ---Creates a new cycle object

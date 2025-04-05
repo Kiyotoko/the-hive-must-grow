@@ -2,25 +2,30 @@
 ---@class Building
 ---@field items List the list of items that is stored in this building
 ---@field pos Vec2 the position of the top left corner of this building
+---@field dim Vec2 the dimensions (w times h) of this building
+---@field icon integer the icon tile
 ---@field new function the constructor of the class
-Building = {
-  icon = {
-    timer = Cycle.new{ max = 5 },
-    display = Cycle.new{ max = 2 },
-  }
-}
+Building = {}
 Building.__index = Building
 
 ---Creates a new building
----@param vec Vec2
+---@param pos Vec2
+---@param class Building the subclass to use
 ---@return Building
-function Building.new(vec)
-    assert(vec ~= nil)
+function Building.new(pos, class)
+    assert(pos ~= nil)
     local created = {
         items = List.new(),
-        pos = vec
+        pos = pos
     }
-    setmetatable(created, Building)
+    -- we want to block all fields with dummys to prevent placing a structure inside it
+    for x = pos.x, pos.x + class.dim.x do
+        for y = pos.y, pos.y + class.dim.y do
+            Overlay:set_building(x, y, Dummy)
+        end
+    end
+    Overlay:set_building(created.pos.x, created.pos.y, created)
+    setmetatable(created, class)
     return created
 end
 
@@ -32,18 +37,12 @@ function Building:draw()
     error("unimplemented")
 end
 
-function Building:__tostring()
-    return "Building[]"
-end
-
 ---@class Drill: Building
 Drill = {
     frames = List.new(),
-    icon = {
-      frames = List.new(),
-    },
-    timer = Cycle.new{ max=5 },
-    display = Cycle.new{}
+    display = Cycle.new{},
+    dim = Vec2.new{ x=3, y=3 },
+    icon = 25
 }
 Drill.__index = Drill
 Drill.frames:add_all{
@@ -52,55 +51,39 @@ Drill.frames:add_all{
     Vec2.new{ x=6, y=3 },
     Vec2.new{ x=9, y=3 }
 }
-Drill.icon.frames:add_all{21, 22}
 Drill.display.max = Drill.frames:len()
 
 function Drill.new(vec)
-    -- check if a building is already present
-    for x = -1, 1 do
-        for y = -1, 1 do
-            if Overlay:get_building(vec.x + x, vec.y + y) ~= nil then
-                -- another building is already build at this place, we can not create a new drill at this position
-                return nil
-            end
-        end
-    end
-
-    local created = Building.new(vec)
-    setmetatable(created, Drill)
-    -- fill all blocked positions with dummies
-    for x = -1, 1 do
-        for y = -1, 1 do
-            Overlay:set_building(created.pos.x + x, created.pos.y + y, Dummy)
-        end
-    end
-    Overlay:set_building(created.pos.x, created.pos.y, created)
-    return created
+    return Building.new(vec, Drill)
 end
 
 function Drill:draw()
     local frame = Drill.frames:get(Drill.display.val)
-    map(frame.x, frame.y, Tile2Pixel(self.pos.x-1), Tile2Pixel(self.pos.y-1), 3, 3 )
+    map(frame.x, frame.y, Tile2Pixel(self.pos.x), Tile2Pixel(self.pos.y), Drill.dim.x, Drill.dim.y)
 end
 
 ---@class Processor: Building
 Processor = {
-  icon = {
-    frames = List.new()
-  },
+  frames = List.new(),
+  display = Cycle.new{},
+  dim = Vec2.new{ x=2, y=2 },
+  icon = 17
 }
 Processor.__index = Processor
-Processor.icon.frames:add_all{17, 17}
+Processor.frames:add_all{
+    Vec2.new{ x=3 },
+    Vec2.new{ x=5 },
+    Vec2.new{ x=7 }
+}
+Processor.display.max = Processor.frames:len()
 
 function Processor.new(vec)
-    local created = Building.new(vec)
-    setmetatable(created, Processor)
-    Overlay:set_building(created.pos.x, created.pos.y, created)
-    return created
+    return Building.new(vec, Processor)
 end
 
 function Processor:draw()
-    spr(17, Tile2Pixel(self.pos.x), Tile2Pixel(self.pos.y))
+    local frame = Processor.frames:get(Processor.display.val)
+    map(frame.x, frame.y, Tile2Pixel(self.pos.x), Tile2Pixel(self.pos.y), Processor.dim.x, Processor.dim.y)
 end
 
 ---Build options is the list of all possible classes that extend from building that the user can build.
