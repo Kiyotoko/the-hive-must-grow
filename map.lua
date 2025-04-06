@@ -154,12 +154,18 @@ end
 Pickups = List.new()
 
 function Pickups:update()
-    for i = 0, Pickups:len()-1 do
-        local pickup = Pickups:get(i)
+    for pickup in Pickups:iter() do
         pickup.livetime = pickup.livetime - 1
         pickup.pos.y = pickup.pos.y - 0.5
-        if pickup.livetime <= 0 then
+    end
+
+    -- delete pickups in a while loop to prevent concurrent modification exception
+    local i = 0
+    while i < Pickups:len() do
+        if Pickups:get(i).livetime <= 0 then
             Pickups:pop(i)
+        else
+            i = i+1
         end
     end
 end
