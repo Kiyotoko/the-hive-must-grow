@@ -45,7 +45,7 @@ function _draw()
     cls()
 
     -- calculate field of view
-    local fov = Rect.new{ x=Pixel2Tile(Cam.x)-1, y=Pixel2Tile(Cam.y)-1, w=18, h=18 }
+    local fov = Rect.new{ x=Pixel2Tile(Cam.x)-2, y=Pixel2Tile(Cam.y)-2, w=18, h=18 }
     Underlay:draw(fov)
     Overlay:draw(fov)
     Player:draw()

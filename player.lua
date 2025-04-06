@@ -76,6 +76,7 @@ function Player:handle_keys()
     if SwitchCooldown.val == 0 then
         if btn(4) then
             ControlMode = not ControlMode
+            Player.selected = nil
             SwitchCooldown.val = 1
         end
         if btn(5) and not ControlMode then
@@ -102,8 +103,8 @@ function Player:handle_mouse()
                 Player.selected = nil -- deselect previously selected worker
                 for bee in self.bees:iter() do
                     assert(bee ~= nil, "Bee should not be nil")
-                    if bee.pos.x < pos.x and pos.x < bee.pos.x + 8
-                    and bee.pos.y < pos.y and pos.y < bee.pos.y + 8 then
+                    if bee.pos.x-2 < pos.x and pos.x < bee.pos.x + 10
+                    and bee.pos.y-2 < pos.y and pos.y < bee.pos.y + 10 then
                         Player.selected = bee
                         return
                     end

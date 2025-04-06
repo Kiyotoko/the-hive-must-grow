@@ -50,7 +50,7 @@ Hive = {
     },
     display = Cycle.new{},
     dim = Vec2.new{ x=3, y=3 },
-    icon = 25,
+    icon = 24,
     price = Inventory.new{
         stone = 3,
         honey = 9
@@ -63,8 +63,6 @@ function Hive.new(vec)
     Bee.new{ x=Tile2Pixel(vec.x+1), y=Tile2Pixel(vec.y+1) }
     return Building.new(vec, Hive, true)
 end
-
-function Hive:update() end
 
 function Hive:draw()
     local frame = Hive.frames:get(Hive.display.val)
@@ -80,7 +78,7 @@ Farm = {
     },
     display = Cycle.new{},
     dim = Vec2.new{ x=3, y=3 },
-    icon = 17,
+    icon = 30,
     price = Inventory.new{
         stone = 2,
         honey = 1
@@ -112,18 +110,46 @@ function Farm:draw()
     map(frame.x, frame.y, Tile2Pixel(self.pos.x), Tile2Pixel(self.pos.y), Farm.dim.x, Farm.dim.y)
 end
 
----@class Storage: Building
-Storage = {
+Clock = {
     frames = List.from{ Vec2.new{ y=3 }},
     display = Cycle.new{},
+    dim = Vec2.new{ x=3, y=3 },
+    icon = 120,
+    price = {
+        wood = 3
+    }
+}
+Clock.__index = Clock
+
+function Clock.new(pos)
+    local created = Building.new(pos, Clock)
+    created.cooldown = Cycle.new{ max=105 }
+    return created
+end
+
+function Clock:update()
+    if self.cooldown.val == 0 then
+        Player:get_xp(1)
+    end
+    self.cooldown:inc()
+end
+
+function Clock:draw()
+    local frame = Clock.frames:get(Storage.display.val)
+    map(frame.x, frame.y, Tile2Pixel(self.pos.x), Tile2Pixel(self.pos.y), Clock.dim.x, Clock.dim.y)
+end
+
+---@class Storage: Building
+Storage = {
+    frames = List.from{ Vec2.new{ x=3, y=3 }},
+    display = Cycle.new{},
     dim = Vec2.new{ x=3, y=2 },
-    icon = 22,
+    icon = 123,
     price = Inventory.new{
         stone = 4
     }
 }
 Storage.__index = Storage
-Storage.display.max = Storage.frames:len()
 
 function Storage.new(pos)
     return Building.new(pos, Storage)
@@ -148,6 +174,30 @@ function Storage:draw()
     map(frame.x, frame.y, Tile2Pixel(self.pos.x), Tile2Pixel(self.pos.y), Farm.dim.x, Farm.dim.y)
 end
 
+Queen = {
+    frames = List.from{
+        Vec2.new{ x=6, y=3 },
+        Vec2.new{ x=9, y=3 }
+    },
+    display = Cycle.new{ max=2 },
+    dim = Vec2.new{ x=3, y=3 },
+    icon = 56,
+    price = {
+        honey = 10
+    }
+}
+Queen.__index = Queen
+
+function Queen.new(pos)
+    Player:get_xp(40)
+    return Building.new(pos, Queen, true)
+end
+
+function Queen:draw()
+    local frame = Queen.frames:get(Queen.display.val)
+    map(frame.x, frame.y, Tile2Pixel(self.pos.x), Tile2Pixel(self.pos.y), Queen.dim.x, Queen.dim.y)
+end
+
 Fauna = {
     types = List.from{
         Vec2.new{ x=12 },
@@ -163,15 +213,13 @@ function Fauna.new(pos)
     return created
 end
 
-function Fauna:update() end
-
 function Fauna:draw()
     local frame = Fauna.types:get(self.type)
     map(frame.x, frame.y, Tile2Pixel(self.pos.x), Tile2Pixel(self.pos.y), Fauna.dim.x, Fauna.dim.y)
 end
 
 ---Build options is the list of all possible classes that extend from building that the user can build.
-BuildOptions = List.from{Hive, Farm, Storage}
+BuildOptions = List.from{Hive, Farm, Clock, Storage, Queen}
 
 SelectedOption = Cycle.new{
     max=BuildOptions:len()
