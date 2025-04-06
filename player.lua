@@ -53,7 +53,7 @@ SOUND = {
 
 ---@class Player
 Player = {
-    inv = Inventory:new(),
+    inv = Inventory.new{},
     bees = List.new(),
     buildings = List.new(),
     selected = nil,

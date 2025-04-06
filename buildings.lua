@@ -50,10 +50,11 @@ Hive = {
     },
     display = Cycle.new{},
     dim = Vec2.new{ x=3, y=3 },
-    icon = 24,
+    icon = 68,
     price = Inventory.new{
-        stone = 3,
-        honey = 9
+        stone = 2,
+        wood = 4,
+        honey = 6
     }
 }
 Hive.__index = Hive
@@ -78,10 +79,10 @@ Farm = {
     },
     display = Cycle.new{},
     dim = Vec2.new{ x=3, y=3 },
-    icon = 30,
+    icon = 84,
     price = Inventory.new{
-        stone = 2,
-        honey = 1
+        stone = 6,
+        wood = 4
     }
 }
 Farm.__index = Farm
@@ -111,12 +112,16 @@ function Farm:draw()
 end
 
 Clock = {
-    frames = List.from{ Vec2.new{ y=3 }},
-    display = Cycle.new{},
+    frames = List.from{
+        Vec2.new{ y=3 },
+        Vec2.new{ x=3, y=3 }
+    },
+    display = Cycle.new{ max=2 },
     dim = Vec2.new{ x=3, y=3 },
-    icon = 120,
+    icon = 83,
     price = Inventory.new{
-        wood = 3
+        stone = 2,
+        wood = 6
     }
 }
 Clock.__index = Clock
@@ -135,18 +140,19 @@ function Clock:update()
 end
 
 function Clock:draw()
-    local frame = Clock.frames:get(Storage.display.val)
+    local frame = Clock.frames:get(Clock.display.val)
     map(frame.x, frame.y, Tile2Pixel(self.pos.x), Tile2Pixel(self.pos.y), Clock.dim.x, Clock.dim.y)
 end
 
 ---@class Storage: Building
 Storage = {
-    frames = List.from{ Vec2.new{ x=3, y=3 }},
+    frames = List.from{ Vec2.new{ x=12, y=4 }},
     display = Cycle.new{},
     dim = Vec2.new{ x=3, y=2 },
-    icon = 123,
+    icon = 66,
     price = Inventory.new{
-        stone = 4
+        wood = 3,
+        honey = 5
     }
 }
 Storage.__index = Storage
@@ -171,7 +177,7 @@ end
 
 function Storage:draw()
     local frame = Storage.frames:get(Storage.display.val)
-    map(frame.x, frame.y, Tile2Pixel(self.pos.x), Tile2Pixel(self.pos.y), Farm.dim.x, Farm.dim.y)
+    map(frame.x, frame.y, Tile2Pixel(self.pos.x), Tile2Pixel(self.pos.y), Storage.dim.x, Storage.dim.y)
 end
 
 Queen = {
@@ -181,9 +187,10 @@ Queen = {
     },
     display = Cycle.new{ max=2 },
     dim = Vec2.new{ x=3, y=3 },
-    icon = 56,
+    icon = 67,
     price = Inventory.new{
-        honey = 18
+        wood = 1,
+        honey = 10
     }
 }
 Queen.__index = Queen
@@ -200,13 +207,16 @@ end
 
 Tradeport = {
     frames = List.from{
-        Vec2.new{ }
+        Vec2.new{ x=12 },
+        Vec2.new{ x=12, y=2 }
     },
-    display = Cycle.new{},
-    dim = Vec2.new{ x=3, y=3 },
-    icon = 56,
+    display = Cycle.new{ max=2 },
+    dim = Vec2.new{ x=2, y=2 },
+    icon = 49,
     price = Inventory.new{
-        stone = 4
+        stone = 8,
+        wood = 8,
+        honey = 4
     }
 }
 Tradeport.__index = Tradeport
@@ -235,10 +245,39 @@ function Tradeport:draw()
     map(frame.x, frame.y, Tile2Pixel(self.pos.x), Tile2Pixel(self.pos.y), Tradeport.dim.x, Tradeport.dim.y)
 end
 
+Box = {
+    frames = List.from{
+        Vec2.new{ x=14, y=2 }
+    },
+    display = Cycle.new{},
+    dim = Vec2.new{ x=2, y=2 },
+    icon = 50,
+    price = Inventory.new{
+        stone = 1,
+        wood = 2,
+        honey = 4
+    }
+}
+Box.__index = Box
+
+function Box.new(pos)
+    Player:get_xp(15)
+    return Building.new(pos, Box, true)
+end
+
+function Box:draw()
+    local frame = Box.frames:get(Box.display.val)
+    map(frame.x, frame.y, Tile2Pixel(self.pos.x), Tile2Pixel(self.pos.y), Box.dim.x, Box.dim.y)
+end
+
+
 Fauna = {
     types = List.from{
-        Vec2.new{ x=12 },
-        Vec2.new{ x=13 }
+        Vec2.new{ x=12, y=6 },
+        Vec2.new{ x=13, y=6 },
+        Vec2.new{ x=14, y=6 },
+        Vec2.new{ x=15, y=6 },
+        Vec2.new{ x=16, y=6 }
     },
     dim = Vec2.new{ x=1, y=2 }
 }
@@ -246,7 +285,7 @@ Fauna.__index = Fauna
 
 function Fauna.new(pos)
     local created = Building.new(pos, Fauna, true)
-    created.type = flr(rnd(2))
+    created.type = flr(rnd(5))
     return created
 end
 
@@ -256,7 +295,7 @@ function Fauna:draw()
 end
 
 ---Build options is the list of all possible classes that extend from building that the user can build.
-BuildOptions = List.from{Hive, Farm, Clock, Storage, Queen}
+BuildOptions = List.from{Hive, Farm, Storage, Tradeport, Clock, Box, Queen}
 
 SelectedOption = Cycle.new{
     max=BuildOptions:len()
