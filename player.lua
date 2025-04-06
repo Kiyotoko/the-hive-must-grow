@@ -167,7 +167,7 @@ end
 ---@field pos Vec2
 ---@field inv Inventory
 Bee = {
-    frames = List.from{9, 10},
+    frames = List.from{3, 4},
     display = Cycle.new{}
 }
 Bee.__index = Bee
@@ -193,10 +193,13 @@ function Bee:update()
     }
     local n = Underlay:get_field(tile)
     if n == RESOURCES.stone then
-        Underlay:set_field(tile, 40)
+        Underlay:set_field(tile, MapDefault)
         self.inv:pickup{ stone=1 }
+    elseif n == RESOURCES.wood then
+        Underlay:set_field(tile, MapDefault)
+        self.inv:pickup{ wood=1 }
     elseif n == RESOURCES.honey then
-        Underlay:set_field(tile, 40)
+        Underlay:set_field(tile, MapDefault)
         self.inv:pickup{ honey=1 }
     end
 end

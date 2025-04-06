@@ -9,7 +9,7 @@ Building = {}
 Building.__index = Building
 
 ---Creates a new building
----@generic T : table
+---@generic T : Building
 ---@param pos Vec2
 ---@param class T the subclass to use
 ---@return T
@@ -42,10 +42,8 @@ end
 ---@class Hive: Building
 Hive = {
     frames = List.from{
-        Vec2.new{ y=3 },
-        Vec2.new{ x=3, y=3 },
-        Vec2.new{ x=6, y=3 },
-        Vec2.new{ x=9, y=3 }
+        Vec2.new{ x=6 },
+        Vec2.new{ x=9 }
     },
     display = Cycle.new{},
     dim = Vec2.new{ x=3, y=3 },
@@ -76,12 +74,11 @@ end
 ---@field cooldown Cycle
 Farm = {
     frames = List.from{
-        Vec2.new{ x=3 },
-        Vec2.new{ x=5 },
-        Vec2.new{ x=7 }
+        Zero,
+        Vec2.new{ x=3 }
     },
     display = Cycle.new{},
-    dim = Vec2.new{ x=2, y=2 },
+    dim = Vec2.new{ x=3, y=3 },
     icon = 17,
     price = Inventory.new{
         stone = 2,
@@ -116,9 +113,9 @@ end
 
 ---@class Storage: Building
 Storage = {
-    frames = List.from{ Vec2.new{ x=9, y=0 }},
+    frames = List.from{ Vec2.new{ y=3 }},
     display = Cycle.new{},
-    dim = Vec2.new{},
+    dim = Vec2.new{ x=3, y=2 },
     icon = 22,
     price = Inventory.new{
         stone = 4
