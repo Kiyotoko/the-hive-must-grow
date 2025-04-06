@@ -19,8 +19,16 @@ function _init()
 end
 
 function _update()
+    -- Loop music. Check if currently any music if played, if not, then play the same song again.
+    if stat(54) < 0 then
+        music(0)
+    end
+
+    -- Check for any user input.
     Player:handle_keys()
     Player:handle_mouse()
+
+    -- Update all buildings and bees of the player.
     Player:update()
     camera(Cam.x, Cam.y)
 end
