@@ -44,6 +44,14 @@ function Inventory:clear()
     self.wood = 0
 end
 
+---@enum Sound
+SOUND = {
+    item_pickup = 0,
+    item_transfer = 1,
+    building_placed = 2,
+}
+
+---@class Player
 Player = {
     inv = Inventory:new(),
     bees = List.new(),
@@ -128,6 +136,7 @@ function Player:handle_mouse()
                     if Player.inv:consume(option.price) then
                         option.new(tile)
                         Player:get_xp(10)
+                        sfx(SOUND.building_placed)
                     end
                 end
             -- RMB
@@ -192,15 +201,20 @@ function Bee:update()
         y=Pixel2Tile(self.pos.y+4)
     }
     local n = Underlay:get_field(tile)
+    local p = false
     if n == RESOURCES.stone then
-        Underlay:set_field(tile, MapDefault)
         self.inv:pickup{ stone=1 }
+        p = true
     elseif n == RESOURCES.wood then
-        Underlay:set_field(tile, MapDefault)
         self.inv:pickup{ wood=1 }
+        p = true
     elseif n == RESOURCES.honey then
-        Underlay:set_field(tile, MapDefault)
         self.inv:pickup{ honey=1 }
+        p = true
+    end
+    if p then
+        Underlay:set_field(tile, MapDefault)
+        sfx(SOUND.item_pickup)
     end
 end
 

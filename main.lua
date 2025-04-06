@@ -11,6 +11,11 @@ function _init()
 
     Hive.new{ x=5, y=7 }
     Storage.new{ x=9, y=7 }
+    for x = 4, 10 do
+        for y = 7, 10 do
+            Underlay:set_field0(x, y, MapDefault)
+        end
+    end
 end
 
 function _update()

@@ -12,21 +12,24 @@ Building.__index = Building
 ---@generic T : Building
 ---@param pos Vec2
 ---@param class T the subclass to use
+---@param dummy boolean?
 ---@return T
-function Building.new(pos, class)
+function Building.new(pos, class, dummy)
     assert(pos ~= nil)
     local created = {
         items = List.new(),
         pos = pos
     }
     -- we want to block all fields with dummys to prevent placing a structure inside it
-    for x = pos.x, pos.x + class.dim.x do
-        for y = pos.y, pos.y + class.dim.y do
+    for x = pos.x, pos.x + class.dim.x-1 do
+        for y = pos.y, pos.y + class.dim.y-1 do
             Overlay:set_building(x, y, Dummy)
         end
     end
     Overlay:set_building(created.pos.x, created.pos.y, created)
-    Player.buildings:add(created)
+    if not dummy then
+        Player.buildings:add(created)
+    end
     setmetatable(created, class)
     return created
 end
@@ -58,12 +61,10 @@ Hive.display.max = Hive.frames:len()
 
 function Hive.new(vec)
     Bee.new{ x=Tile2Pixel(vec.x+1), y=Tile2Pixel(vec.y+1) }
-    return Building.new(vec, Hive)
+    return Building.new(vec, Hive, true)
 end
 
-function Hive:update()
-
-end
+function Hive:update() end
 
 function Hive:draw()
     local frame = Hive.frames:get(Hive.display.val)
@@ -132,8 +133,12 @@ function Storage:update()
     for bee in Player.bees:iter() do
         if abs(bee.pos.x - Tile2Pixel(self.pos.x)-4) < 12
         and abs(bee.pos.y - Tile2Pixel(self.pos.y)-4) < 12 then
-            Player:get_xp(bee.inv.stone + bee.inv.wood + bee.inv.honey)
-            bee.inv:transfer(Player.inv)
+            local sum = bee.inv.stone + bee.inv.wood + bee.inv.honey
+            if sum > 0 then
+                Player:get_xp(sum)
+                bee.inv:transfer(Player.inv)
+                sfx(SOUND.item_transfer)
+            end
         end
     end
 end
@@ -153,7 +158,7 @@ Fauna = {
 Fauna.__index = Fauna
 
 function Fauna.new(pos)
-    local created = Building.new(pos, Fauna)
+    local created = Building.new(pos, Fauna, true)
     created.type = flr(rnd(2))
     return created
 end

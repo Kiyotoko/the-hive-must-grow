@@ -4,7 +4,7 @@ MapDefault = 85
 RESOURCES = {
     stone = 51,
     wood = 36,
-    honey = 34
+    honey = 37
 }
 
 ---@class MapGen
@@ -13,8 +13,7 @@ MapGen = {
     RESOURCES.stone,
     RESOURCES.wood,
     RESOURCES.honey,
-    5,  6,  21, 22,
-    37, 38,
+    05, 06, 21, 22,
     85, 85, 85, 85, 85,
     85, 85, 85, 85, 85,
     85, 85, 85, 85, 85,
