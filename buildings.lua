@@ -143,6 +143,28 @@ function Storage:draw()
     map(frame.x, frame.y, Tile2Pixel(self.pos.x), Tile2Pixel(self.pos.y), Farm.dim.x, Farm.dim.y)
 end
 
+Fauna = {
+    types = List.from{
+        Vec2.new{ x=12 },
+        Vec2.new{ x=13 }
+    },
+    dim = Vec2.new{ x=1, y=2 }
+}
+Fauna.__index = Fauna
+
+function Fauna.new(pos)
+    local created = Building.new(pos, Fauna)
+    created.type = flr(rnd(2))
+    return created
+end
+
+function Fauna:update() end
+
+function Fauna:draw()
+    local frame = Fauna.types:get(self.type)
+    map(frame.x, frame.y, Tile2Pixel(self.pos.x), Tile2Pixel(self.pos.y), Fauna.dim.x, Fauna.dim.y)
+end
+
 ---Build options is the list of all possible classes that extend from building that the user can build.
 BuildOptions = List.from{Hive, Farm, Storage}
 

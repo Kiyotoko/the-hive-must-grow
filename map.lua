@@ -14,7 +14,7 @@ MapGen = {
     RESOURCES.wood,
     RESOURCES.honey,
     5,  6,  21, 22,
-    37, 38, 53, 54,
+    37, 38,
     85, 85, 85, 85, 85,
     85, 85, 85, 85, 85,
     85, 85, 85, 85, 85,
@@ -73,8 +73,14 @@ end
 function Underlay:get_field0(x, y)
     if self[x] == nil then
         self:set_field0(x, y, MapGen:next())
+        if Overlay:get_building(x, y) == nil and Overlay:get_building(x, y-1) == nil and rnd(1) > 0.95 then
+            Fauna.new{ x=x, y=y }
+        end
     elseif self[x][y] == nil then
         self:set_field0(x, y, MapGen:next())
+        if Overlay:get_building(x, y) == nil and Overlay:get_building(x, y-1) == nil and rnd(1) > 0.95 then
+            Fauna.new{ x=x, y=y }
+        end
     end
     return self[x][y]
 end

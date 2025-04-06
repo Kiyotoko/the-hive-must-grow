@@ -226,7 +226,7 @@ end
 
 function Bee:draw()
     if self == Player.selected then
-        circfill(self.pos.x + 4, self.pos.y + 4, 3 + Hive.display.val * 0.5, 8)
+        circfill(self.pos.x + 4, self.pos.y + 4, 3 + Hive.display.val, 8)
         if self.des:len() > 0 then
             local next = self.des:get(0)
             -- We need to add 4 to all coordinates, because the position is saved as the top left corner.

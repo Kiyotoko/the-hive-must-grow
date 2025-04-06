@@ -1,6 +1,6 @@
 ---@diagnostic disable: lowercase-global
 
-AnimationTimer = Cycle.new{ max=8 }
+AnimationTimer = Cycle.new{ max=15 }
 
 function _init()
     -- activate dev mode

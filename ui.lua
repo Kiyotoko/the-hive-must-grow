@@ -3,7 +3,7 @@ UI = {
 }
 
 function UI:draw()
-  print("LVL:   " .. Player.lvl, Cam.x, Cam.y, 7)
+  print("LVL:   " .. Player.lvl, Cam.x+1, Cam.y+1, 7)
   print("XP:    " .. Player.xp)
   print("STONE: " .. Player.inv.stone)
   print("WOOD:  " .. Player.inv.wood)
@@ -36,7 +36,7 @@ function UI:draw()
   print(ControlMode and "CONTROL" or "BUILD", Cam.x + 5, Cam.y + 121, 7)
 
   -- draw indicator bg 
-  rectfill(Cam.x + 80, Cam.y + 118, Cam.x + 90, Cam.y + 127, 7)
+  rectfill(Cam.x + 80, Cam.y + 118, Cam.x + 89, Cam.y + 127, 7)
   -- draw current building 
   spr(BuildOptions[SelectedOption.val].icon, Cam.x + 81, Cam.y + 119)
 

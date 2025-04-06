@@ -47,7 +47,11 @@ sin = function (a) return math.sin(a) end
 cos = function (a) return math.cos(a) end
 abs = function (num) end
 flr = function (num) return math.floor(num) end
-rnd = function (table) return 0 end
+
+---@generic T
+---@param table table|integer
+---@return T
+rnd = function (table) return nil end
 
 ---######################
 ---
