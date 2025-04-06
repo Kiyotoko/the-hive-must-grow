@@ -115,7 +115,7 @@ Clock = {
     display = Cycle.new{},
     dim = Vec2.new{ x=3, y=3 },
     icon = 120,
-    price = {
+    price = Inventory.new{
         wood = 3
     }
 }
@@ -182,8 +182,8 @@ Queen = {
     display = Cycle.new{ max=2 },
     dim = Vec2.new{ x=3, y=3 },
     icon = 56,
-    price = {
-        honey = 10
+    price = Inventory.new{
+        honey = 18
     }
 }
 Queen.__index = Queen
@@ -196,6 +196,43 @@ end
 function Queen:draw()
     local frame = Queen.frames:get(Queen.display.val)
     map(frame.x, frame.y, Tile2Pixel(self.pos.x), Tile2Pixel(self.pos.y), Queen.dim.x, Queen.dim.y)
+end
+
+Tradeport = {
+    frames = List.from{
+        Vec2.new{ }
+    },
+    display = Cycle.new{},
+    dim = Vec2.new{ x=3, y=3 },
+    icon = 56,
+    price = Inventory.new{
+        stone = 4
+    }
+}
+Tradeport.__index = Tradeport
+
+function Tradeport.new(pos)
+    local created = Building.new(pos, Tradeport)
+    created.cooldown = Cycle.new{ max=16 }
+end
+
+function Tradeport:update()
+    if self.cooldown.val > 0 then
+        self.cooldown:inc()
+    elseif Player.inv.honey > 25 then
+        Player.inv.honey = Player.inv.honey - 1
+        if Player.inv.stone < Player.inv.wood then
+            Player.inv.stone = Player.inv.stone + 1
+        else
+            Player.inv.wood = Player.inv.wood + 1
+        end
+        self.cooldown:inc()
+    end
+end
+
+function Tradeport:draw()
+    local frame = Tradeport.frames:get(Tradeport.display.val)
+    map(frame.x, frame.y, Tile2Pixel(self.pos.x), Tile2Pixel(self.pos.y), Tradeport.dim.x, Tradeport.dim.y)
 end
 
 Fauna = {

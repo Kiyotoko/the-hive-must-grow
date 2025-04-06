@@ -32,13 +32,15 @@ function UI:draw()
   end
   ]]
 
+  local building = BuildOptions[SelectedOption.val]
+
   -- print mode
-  print(ControlMode and "CONTROL" or "BUILD", Cam.x + 5, Cam.y + 121, 7)
-
-  -- draw indicator bg 
-  rectfill(Cam.x + 80, Cam.y + 118, Cam.x + 89, Cam.y + 127, 7)
-  -- draw current building 
-  spr(BuildOptions[SelectedOption.val].icon, Cam.x + 81, Cam.y + 119)
-
-  -- print(Player.inv.stone .. "|" .. Player.inv.wood .. "|" .. Player.inv.honey, Cam.x + 90, Cam.y + 121, 7)
+  print(ControlMode and "CONTROL" or "BUILD", Cam.x + 5, Cam.y + 122, 7)
+  if not ControlMode then
+    print("S: " .. building.price.stone .. " W: " .. building.price.wood .. " H: " .. building.price.honey, Cam.x + 65, Cam.y + 121, 7)
+    -- draw indicator bg 
+    rectfill(Cam.x + 50, Cam.y + 118, Cam.x + 59, Cam.y + 127, 7)
+    -- draw current building 
+    spr(building.icon, Cam.x + 51, Cam.y + 119)
+  end
 end

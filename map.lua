@@ -150,6 +150,44 @@ function Overlay:draw(rect)
     end
 end
 
+---@class Pickup: List
+Pickups = List.new()
+
+function Pickups:update()
+    for i = 0, Pickups:len()-1 do
+        local pickup = Pickups:get(i)
+        pickup.livetime = pickup.livetime - 1
+        pickup.pos.y = pickup.pos.y - 0.5
+        if pickup.livetime <= 0 then
+            Pickups:pop(i)
+        end
+    end
+end
+
+function Pickups:draw()
+    for p in Pickups:iter() do
+        p:draw()
+    end
+end
+
+Pickup = {}
+Pickup.__index = Pickup
+
+function Pickup.new(pos, text)
+    local created = {
+        pos = pos,
+        text = text,
+        livetime = 15
+    }
+    setmetatable(created, Pickup)
+    Pickups:add(created)
+    return Pickup
+end
+
+function Pickup:draw()
+    print(self.text, self.pos.x-11, self.pos.y, 7)
+end
+
 ---Transforms a pixel coordinate to the corresponding tile.
 ---@param pixel number the coordinate in pixels
 ---@return integer tile the coordinate in tiles

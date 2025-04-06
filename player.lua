@@ -79,9 +79,16 @@ function Player:handle_keys()
             Player.selected = nil
             SwitchCooldown.val = 1
         end
-        if btn(5) and not ControlMode then
-            SelectedOption:inc()
-            SwitchCooldown.val = 1
+        if btn(5) then
+            if ControlMode then
+                if Player.selected == nil then
+                    Cam.x = 0
+                    Cam.y = 0
+                end
+            else
+                SelectedOption:inc()
+                SwitchCooldown.val = 1
+            end
         end
     else
         SwitchCooldown:inc()
@@ -206,12 +213,15 @@ function Bee:update()
     if n == RESOURCES.stone then
         self.inv:pickup{ stone=1 }
         p = true
+        Pickup.new(self.pos, "+1 STONE")
     elseif n == RESOURCES.wood then
         self.inv:pickup{ wood=1 }
         p = true
+        Pickup.new(self.pos, "+1 WOOD")
     elseif n == RESOURCES.honey then
         self.inv:pickup{ honey=1 }
         p = true
+        Pickup.new(self.pos, "+1 HONEY")
     end
     if p then
         Underlay:set_field(tile, MapDefault)
